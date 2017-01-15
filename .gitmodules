@@ -1,0 +1,3 @@
+[submodule "usbasp-uart"]
+	path = usbasp-uart
+	url = https://github.com/coolshou/usbasp-uart.git
