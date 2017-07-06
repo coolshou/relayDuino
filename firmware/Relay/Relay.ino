@@ -1,3 +1,6 @@
+
+//VERSION: 20170706
+
 #include <Thread.h>
 #include <ThreadController.h>
 
@@ -6,7 +9,7 @@ ThreadController controll = ThreadController();
 
 //read cmd Thread (as a pointer)
 Thread* readcmdThread = new Thread();
-//template 1 Thread 
+//template 1 Thread
 Thread* temp1Thread = new Thread();
 int temp1TimeON = 10000; //sec
 int temp1TimeOFF = 20000; //sec
@@ -55,41 +58,41 @@ void setup() {
   temp1Thread->setInterval(1000);
   // Adds threads to the controller
   controll.add(readcmdThread);
-    
+
   Serial.write("System ready");
 }
 int getPower(int idx)
 {
-  if (idx>3){
+  if (idx > 3) {
     Serial.print("getPower out of index:");
     Serial.println(idx);
     return -1;
   }
   int val = digitalRead(relayPin[idx]);
   Serial.print("Power ");
-  Serial.print(idx+1);
+  Serial.print(idx + 1);
   Serial.print(" status: ");
   state2Power(val);
 
 }
 void setPower(int idx, int state)
 {
-  if (state == 1 ){
+  if (state == 1 ) {
     relayState[idx] = 0; // 0= on
   } else {
     relayState[idx] = 1; // 1= off
   }
   digitalWrite(relayPin[idx], relayState[idx]);    // 讓繼電器作動, 切換開關
-  Serial.print("Power " + String(idx+1) + " status: ");        // 把繼電器的狀態印到 Serial Port
+  Serial.print("Power " + String(idx + 1) + " status: ");      // 把繼電器的狀態印到 Serial Port
   state2Power(relayState[idx]);
 }
 void state2Power(int state)
 {
-  if (state==ON) {
-    Serial.println("ON");  
+  if (state == ON) {
+    Serial.println("ON");
   } else {
-    Serial.println("OFF");  
-  }  
+    Serial.println("OFF");
+  }
 }
 //idx = 0~3
 void switchRelay(int idx)
@@ -105,13 +108,13 @@ void switchRelay(int idx)
 
 }
 //printf like function (limit 128 chars)
-void pf(const char *fmt, ... ){
-    char tmp[128]; // resulting string limited to 128 chars
-    va_list args;
-    va_start (args, fmt );
-    vsnprintf(tmp, 128, fmt, args);
-    va_end (args);
-    Serial.print(tmp);
+void pf(const char *fmt, ... ) {
+  char tmp[128]; // resulting string limited to 128 chars
+  va_list args;
+  va_start (args, fmt );
+  vsnprintf(tmp, 128, fmt, args);
+  va_end (args);
+  Serial.print(tmp);
 }
 
 int read_line(char* buffer, int bufsize)
@@ -122,7 +125,7 @@ int read_line(char* buffer, int bufsize)
     }
 
     char ch = Serial.read(); // read next character
-    Serial.print(ch); // echo it back: useful with the serial monitor (optional)
+    //Serial.print(ch); // echo it back: useful with the serial monitor (optional)
 
     if (ch == '\n') {
       buffer[index] = 0; // end of line reached: null terminate string
@@ -141,7 +144,7 @@ int read_line(char* buffer, int bufsize)
     while (Serial.available() == 0) {
     }
     ch = Serial.read(); // read next character (and discard it)
-    Serial.print(ch); // echo it back
+    //Serial.print(ch); // echo it back
   } while (ch != '\n');
 
   buffer[0] = 0; // set buffer to empty string even though it should not be used
@@ -152,7 +155,7 @@ int read_line(char* buffer, int bufsize)
 
 void template1Callback()
 {
-  
+
 }
 //=================================================================================
 void help()
@@ -164,13 +167,13 @@ void helpSetCMD()
   Serial.println("Set command:");
   Serial.println(" set <power num> <0/1>");
   Serial.println("<power num>: 1~4");
-  Serial.println("<0:off/1:on>");  
+  Serial.println("<0:off/1:on>");
 }
 void helpGetCMD()
 {
   Serial.println("Get command should be:");
   Serial.println(" get <power num> ");
-  Serial.println("<power num>: 1~4"); 
+  Serial.println("<power num>: 1~4");
 }
 //=================================================================================
 
@@ -189,19 +192,19 @@ void readcmdCallback() {
   //Serial.print("Parsing the input string: ");// '%s'\n", input);
   //Serial.println(line);
   char *token = strtok(line, " ");
-  int i=0;
+  int i = 0;
   char cmds[3];
-  while(token) {
-      //Serial.println(token);
-      cmds[i] = token;
-      token = strtok(NULL, " ");
-      i++;
+  while (token) {
+    //Serial.println(token);
+    cmds[i] = token;
+    token = strtok(NULL, " ");
+    i++;
   }
   //Serial.println("==" + String(i) + "==========================");
 
   if (strcmp(cmds[0], "set") == 0) {
     //set relay on/off
-    if (i<3) {
+    if (i < 3) {
       helpSetCMD();
       return;
     }
@@ -209,20 +212,20 @@ void readcmdCallback() {
     int p, s;
     p = atoi(cmds[1]);
     s = atoi(cmds[2]);
-    setPower(p-1, s);
+    setPower(p - 1, s);
   } else if (strcmp(cmds[0], "get") == 0) {
     //get relay status
-    if (i<2) {
+    if (i < 2) {
       helpGetCMD();
       return;
     }
     //Serial.println("Get command");
     int p = atoi(cmds[1]);
-    getPower(p-1);
-  } else if (strcmp(cmds[0], "temp1") == 0){
-    // enable/disable, power num, On sec , Off sec, 
-    
-  } else if (strcmp(cmds[0], "") == 0){
+    getPower(p - 1);
+  } else if (strcmp(cmds[0], "temp1") == 0) {
+    // enable/disable, power num, On sec , Off sec,
+
+  } else if (strcmp(cmds[0], "") == 0) {
     help();
     return;
   } else {
@@ -231,12 +234,12 @@ void readcmdCallback() {
     Serial.println("\" (available commands: \"set\", \"get\")");
   }
   //delay(1000);
- 
+
 }
-void loop(){
+void loop() {
   // run ThreadController
   // this will check every thread inside ThreadController,
   // if it should run. If yes, he will run it;
   controll.run();
-  
+
 }
