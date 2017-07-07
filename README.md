@@ -15,7 +15,7 @@ USBasp+ control power on/off relay
     #install Arduino IDE (https://www.arduino.cc)
     #install resuire Arduino lib: ArduinoThread (https://github.com/ivanseidel/ArduinoThread)
     Menu -> Sketch ->  Include Library -> Manage Libraries
-    ![](image/lib01.jpg "Manage Libraries")
+    ![Manage Libraries](https://github.com/coolshou/relayDuino/blob/master/image/lib01.jpg)
     filter with ArduinoThread and install it
     ![](image/lib02.jpg "ArduinoThread")
     #open firmware/Relay/Relay.ino
