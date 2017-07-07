@@ -15,20 +15,26 @@ USBasp+ control power on/off relay
     #install Arduino IDE (https://www.arduino.cc)
     #install resuire Arduino lib: ArduinoThread (https://github.com/ivanseidel/ArduinoThread)
     Menu -> Sketch ->  Include Library -> Manage Libraries
-    ![Manage Libraries](https://github.com/coolshou/relayDuino/blob/master/image/lib01.jpg)
+![Manage Libraries](image/lib01.jpg)
+
     filter with ArduinoThread and install it
-    ![](image/lib02.jpg "ArduinoThread")
+!["ArduinoThread"](image/lib02.jpg)
+
     #open firmware/Relay/Relay.ino
     Select board
-    ![](image/00-select-board.jpg "Select board")
+!["Select board"](image/00-select-board.jpg)
+
     Select processor
-    ![](image/01-select-processor.jpg "Select processor")
+!["Select processor"](image/01-select-processor.jpg)
+
     Select programmer
-    ![](image/02-select-programmer.jpg "Select programmer")
+!["Select programmer"](image/02-select-programmer.jpg)
+
     Verify/Compile
-    ![](image/03-Compile.jpg "Compile")
+!["Compile"](image/03-Compile.jpg )
+
     Upload Using Programmer
-    ![](image/04-upload-by-usbasp.jpg "Upload")
+!["Upload"](image/04-upload-by-usbasp.jpg)
 
 # Use avrelay to control relayDuino's  power pin
     > cd avrelay
