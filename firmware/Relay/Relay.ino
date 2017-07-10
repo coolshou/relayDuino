@@ -33,6 +33,9 @@ int relayState[] = {
 
 const int LINE_BUFFER_SIZE = 80; // max line length is one less than this
 
+char *cmdString[] = {"get", "set", "max"};
+#define numCmdString (sizeof(cmdString)/sizeof(char *)) //array size
+
 void setup() {
   // put your setup code here, to run once:
   // soft serial pin2 = Rx, pin3 = Tx
@@ -60,6 +63,12 @@ void setup() {
   controll.add(readcmdThread);
 
   Serial.write("System ready");
+}
+int getMaxPowerNumber()
+{
+  int val = sizeof(relayPin)/sizeof(int);
+  Serial.println(val);
+  return val;
 }
 int getPower(int idx)
 {
@@ -160,7 +169,17 @@ void template1Callback()
 //=================================================================================
 void help()
 {
-  Serial.println("Only support \"set\" and \"get\" command");
+  //Serial.println("Only support \"set\", \"get\" and \"max\" command");
+  Serial.print("Only support ");
+  for (int i =0; i< numCmdString; i++) {
+    Serial.print("\"");
+    Serial.print(cmdString[i]);
+    Serial.print("\"");
+    if (i < (numCmdString-1)){
+      Serial.print(",");  
+    }
+  }
+  Serial.println(" command");
 }
 void helpSetCMD()
 {
@@ -174,6 +193,11 @@ void helpGetCMD()
   Serial.println("Get command should be:");
   Serial.println(" get <power num> ");
   Serial.println("<power num>: 1~4");
+}
+void helpMaxCMD()
+{
+  Serial.println("Max support power number command should be:");
+  Serial.println(" max ");
 }
 //=================================================================================
 
@@ -222,16 +246,21 @@ void readcmdCallback() {
     //Serial.println("Get command");
     int p = atoi(cmds[1]);
     getPower(p - 1);
+  } else if (strcmp(cmds[0], "max") == 0) {
+    //get max support power number
+    getMaxPowerNumber();
   } else if (strcmp(cmds[0], "temp1") == 0) {
     // enable/disable, power num, On sec , Off sec,
-
+    Serial.print("TODO: template setting: \"");
   } else if (strcmp(cmds[0], "") == 0) {
     help();
     return;
   } else {
     Serial.print("Error: unknown command: \"");
     Serial.print(line);
-    Serial.println("\" (available commands: \"set\", \"get\")");
+    Serial.print("\", ");
+    //Serial.println("\" (available commands: \"set\", \"get\")");
+    help();
   }
   //delay(1000);
 
