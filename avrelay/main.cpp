@@ -12,71 +12,6 @@
 
 int verbose=0;
 
-void writeTest(USBasp_UART* usbasp, int size){
-	std::string s;
-	char c='a';
-	for(int i=0; i<size; i++){
-		s+=c;
-		c++;
-		if(c>'z'){ c='a'; }
-	}
-	auto start=std::chrono::high_resolution_clock::now();
-	int rv;
-	if((rv=usbasp_uart_write_all(usbasp, (uint8_t*)s.c_str(), s.size()))<0){
-		fprintf(stderr, "Error %d while writing...\n", rv);
-		return;
-	}
-	auto finish=std::chrono::high_resolution_clock::now();
-	auto us=std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
-	printf("%zu bytes sent in %zums\n", s.size(), us/1000);
-	printf("Average speed: %lf kB/s\n", s.size()/1000.0/(us/1000000.0));
-}
-
-void readTest(USBasp_UART* usbasp, size_t size){
-	auto start=std::chrono::high_resolution_clock::now();
-	int us;
-	std::string s;
-	while(1){
-		if(s.size()==0){
-			start=std::chrono::high_resolution_clock::now();
-		}
-		if(s.size()>=size){
-			auto finish=std::chrono::high_resolution_clock::now();
-			us=std::chrono::duration_cast<std::chrono::microseconds>(finish-start).count();
-			break;
-		}
-		uint8_t buff[300];
-		int rv=usbasp_uart_read(usbasp, buff, sizeof(buff));
-		if(rv==0){ continue; } // Nothing is available for now.
-		else if(rv<0){
-			fprintf(stderr, "Error while reading, rv=%d\n", rv);
-			return;
-		}
-		else{
-			s+=std::string((char*)buff, rv);
-			fprintf(stderr, "%zu/%zu\n", s.size(), size);
-		}
-	}
-	printf("Whole received text:\n");
-	printf("%s\n", s.c_str());
-	printf("%zu bytes received in %dms\n", s.size(), us/1000);
-	printf("Average speed: %lf kB/s\n", s.size()/1000.0/(us/1000000.0));
-}
-
-void read_forever(USBasp_UART* usbasp){
-	while(1){
-		uint8_t buff[300];
-		int rv=usbasp_uart_read(usbasp, buff, sizeof(buff));
-		if(rv<0){
-			fprintf(stderr, "read: rv=%d\n", rv);
-			return;
-		}
-		for(int i=0;i<rv;i++){
-			printf("%c",buff[i]);
-		}
-		fflush(stdout);
-	}
-}
 //read to \n
 void readline(USBasp_UART* usbasp)
 {
@@ -110,21 +45,6 @@ void read_usbasp(USBasp_UART* usbasp){
 		printf("%c",buff[i]);
 	}
 	fflush(stdout);
-}
-
-void write_forever(USBasp_UART* usbasp){
-	uint8_t buff[1024];
-	while(1){
-		int rv=read(STDIN_FILENO, buff, sizeof(buff));
-		if(rv==0){ return; }
-		else if(rv<0){
-			fprintf(stderr, "write: read from stdin returned %d\n", rv);
-			return;
-		}
-		else{
-			usbasp_uart_write_all(usbasp, buff, rv);
-		}
-	}
 }
 
 void showVersion() {
