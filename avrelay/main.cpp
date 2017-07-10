@@ -143,6 +143,7 @@ void usage(const char* name){
 	fprintf(stderr, "Options:\n");
 	fprintf(stderr, " -g <pin> \t\tget power pin status\n");
 	usageSet(name, false);
+	fprintf(stderr, " -m \t\t\tget max supported power pin number\n");
 	fprintf(stderr, " -d <num> \t\tincrease debug verbosity\n");
 	fprintf(stderr, " -v \t\tshow version\n");
 	fprintf(stderr, " -h \t\tshow this help\n");
@@ -164,11 +165,12 @@ int main(int argc, char** argv){
 
 	bool bDoGet = false;
 	bool bDoSet = false;
+	bool bGetMaxPowerNum = false;
 
 	opterr=0;
 	int c;
 
-	while( (c=getopt(argc, argv, "vhd:g:s:"))!=-1){
+	while( (c=getopt(argc, argv, "vhmd:g:s:"))!=-1){
 		switch(c){
 		case 'g':  //get power pin
 			bDoGet = true;
@@ -196,6 +198,9 @@ int main(int argc, char** argv){
 				//fprintf(stderr,"optind: %d  %s \n",optind ,argv[optind]);
 			}
 			break;
+		case 'm':
+			bGetMaxPowerNum = true;
+			break;
 		case 'v':
 			showVersion();
 			exit(0);
@@ -222,29 +227,34 @@ int main(int argc, char** argv){
 		}
 		return -1;
 	}
-	//TODO:
+	std::stringstream ss;
+	std::string s ;
 	if (bDoGet) { 	//get power
 		//fprintf(stderr, "get Power %d state\n",iPowerPin );
-		std::stringstream ss;
 		ss << "get " << iPowerPin << "\n" ;
-		std::string s = ss.str();
+		s = ss.str();
 		//fprintf(stderr, "cmd:  %s\n", s.c_str());
-		//send command to USBasp+
-		usbasp_uart_write_all(&usbasp, (uint8_t*)s.c_str(), s.length());
-		//read result
-		readline(&usbasp);
 	}
-	//set power
-	if (bDoSet) {
+	if (bDoSet) { 	//set power
 		//fprintf(stderr, "set Power %d state to %ld\n",iPowerPin, iPowerSwitch );
-		std::stringstream ss;
 		ss << "set " << iPowerPin << " " << iPowerSwitch << " \n" ;
-		std::string s = ss.str();
+		s = ss.str();
 		//fprintf(stderr, "cmd:  %s\n", s.c_str());
+		//send command to USBasp+
+		//usbasp_uart_write_all(&usbasp, (uint8_t*)s.c_str(), s.length());
+		//read result
+		//readline(&usbasp);
+	}
+	if (bGetMaxPowerNum) { //get Max support power number
+		ss << "max" << " \n" ;
+		s = ss.str();
+	}
+	if (s.length() >0) {
 		//send command to USBasp+
 		usbasp_uart_write_all(&usbasp, (uint8_t*)s.c_str(), s.length());
 		//read result
 		readline(&usbasp);
 	}
+
 	return EXIT_SUCCESS;
 }
