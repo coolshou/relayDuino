@@ -1,0 +1,25 @@
+id ICON "avrelay.ico"
+#include "version.h"
+1 VERSIONINFO
+FILEVERSION     vMAJOR,vMINOR,vBUILD,vPATCH
+PRODUCTVERSION  vMAJOR,vMINOR,vBUILD,vPATCH
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "Coolshou"
+      VALUE "FileDescription", "avr relay by usbasp+"
+      //VALUE "FileVersion", VERSION
+      VALUE "InternalName", "avrelay"
+      VALUE "LegalCopyright", "Coolshou"
+      VALUE "OriginalFilename", "avrelay.exe"
+      VALUE "ProductName", "avrelay"
+      VALUE "ProductVersion", VERSION
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
