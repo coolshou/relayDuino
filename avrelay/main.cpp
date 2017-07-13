@@ -127,6 +127,7 @@ int main(int argc, char** argv){
 			break;
 		case 'h':
 			usage(argv[0]);
+			exit(0);
 			break;
 		case 'd':
 			verbose++;
@@ -137,33 +138,29 @@ int main(int argc, char** argv){
 			exit(EXIT_FAILURE);
 		}
 	}
-
-	USBasp_UART usbasp;
-	int rv;
-	if((rv=usbasp_uart_config(&usbasp, baud, parity | bits | stop)) < 0){
-		fprintf(stderr, "Error %d while initializing USBasp\n", rv);
-		if(rv==USBASP_NO_CAPS){
-			fprintf(stderr, "USBasp has no UART capabilities.\n");
-		}
-		return -1;
-	}
+  USBasp_UART usbasp;
+  try {
+    int rv;
+    if((rv=usbasp_uart_config(&usbasp, baud, parity | bits | stop)) < 0){
+      fprintf(stderr, "Error %d while initializing USBasp\n", rv);
+      if(rv==USBASP_NO_CAPS){
+        fprintf(stderr, "USBasp has no UART capabilities.\n");
+      }
+      return -1;
+    }
+  }catch(...) {
+    fprintf(stderr, "Error no USBASP+\n");
+    return -1;
+  }
 	std::stringstream ss;
 	std::string s ;
 	if (bDoGet) { 	//get power
-		//fprintf(stderr, "get Power %d state\n",iPowerPin );
 		ss << "get " << iPowerPin << "\n" ;
 		s = ss.str();
-		//fprintf(stderr, "cmd:  %s\n", s.c_str());
 	}
 	if (bDoSet) { 	//set power
-		//fprintf(stderr, "set Power %d state to %ld\n",iPowerPin, iPowerSwitch );
 		ss << "set " << iPowerPin << " " << iPowerSwitch << " \n" ;
 		s = ss.str();
-		//fprintf(stderr, "cmd:  %s\n", s.c_str());
-		//send command to USBasp+
-		//usbasp_uart_write_all(&usbasp, (uint8_t*)s.c_str(), s.length());
-		//read result
-		//readline(&usbasp);
 	}
 	if (bGetMaxPowerNum) { //get Max support power number
 		ss << "max" << " \n" ;
@@ -171,6 +168,7 @@ int main(int argc, char** argv){
 	}
 	if (s.length() >0) {
 		//send command to USBasp+
+  	//fprintf(stderr, "cmd:  %s\n", s.c_str());
 		usbasp_uart_write_all(&usbasp, (uint8_t*)s.c_str(), s.length());
 		//read result
 		readline(&usbasp);
