@@ -54,3 +54,7 @@ USBasp+ control power on/off relay
     #install msys2
     # install require libusb
     > pacman -S mingw32/mingw-w64-i686-libusb mingw64/mingw-w64-x86_64-libusb
+
+# NOTE: known problem
+  1. Windows (x86/x64): when usbasp+ not connected, the avrelay will crash on libusb-1.0.dll (1.0.21.11156)
+  
