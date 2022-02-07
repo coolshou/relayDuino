@@ -57,4 +57,4 @@ USBasp+ control power on/off relay
 
 # NOTE: known problem
   1. Windows (x86/x64): when usbasp+ not connected, the avrelay will crash on libusb-1.0.dll (1.0.21.11156)
-  
+        on this libusb_control_transfer function!!
