@@ -1,19 +1,29 @@
 # relayDuino
 USBasp+ control power on/off relay
 
+# Requirement
+	# require package gcc-avr avrdude fritzing
+	sudo apt install gcc-avr avr-libc
+	sudo apt install avrdude
+# build Hardware
+	# use fritzing to check USBasp+.fzz
+![USBasp+breadboard](image/usbasp_breadboard.png)	
+![USBasp+diagram](image/usbasp_diagram.png)	
+![USBasp+pcb](image/usbasp_pcb.png)	
 # burn usbasp+ (only do once)
-    #install require package: gcc-avr
-    > sudo apt install gcc-avr avr-libc
-    > cd usbasp-uart/firmware
-    > make main.hex
-    #upload firmware to ATMega8
-    #install require package: avrdude
-    > sudo apt install avrdude
-    > avrdude -v -patmega8 -c usbasp -Uflash:w:main.hex:i
+	# clone relayDuino
+	git clone https://github.com/coolshou/relayDuino.git
+	cd relayDuino
+	git submodule init
+	git submodule update
+	cd usbasp-uart/firmware
+	make main.hex
+	# upload firmware to ATMega8
+	avrdude -v -patmega8 -c usbasp -Uflash:w:main.hex:i
 
 # burn relayDuino ()
     #install Arduino IDE (https://www.arduino.cc)
-    #install resuire Arduino lib: ArduinoThread (https://github.com/ivanseidel/ArduinoThread)
+    #install require Arduino lib: ArduinoThread (https://github.com/ivanseidel/ArduinoThread)
     Menu -> Sketch ->  Include Library -> Manage Libraries
 ![Manage Libraries](image/lib01.jpg)
 
@@ -45,6 +55,7 @@ USBasp+ control power on/off relay
     > avrelay -s 1 1
     #set Power pin OFF
     > avrelay -s 1 0
+# Use python to control relayDuino's  power pin
 
 # Use usbasp_uart to communicate with the relayDuino (interactive)
     #require libusb-1.0-0-dev
